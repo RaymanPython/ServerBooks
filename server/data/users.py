@@ -42,10 +42,10 @@ class Books(SqlAlchemyBase):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
 
-    # author = orm.relation("User", back_populates='user')
+    author = orm.relation("User")
 
     def link(self):
-        return (self.name, url_for('index') + "uploads/" + self.text, self.about)
+        return (self.name, url_for('index') + "uploads/" + self.text, self.about, self.author.name)
 
     def __str__(self):
         name, link = self.link()

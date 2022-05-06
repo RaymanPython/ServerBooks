@@ -19,7 +19,7 @@ from flask import send_from_directory
 from werkzeug.utils import secure_filename
 from wtforms import Form, StringField, SelectField
 from flask_login import login_required
-from flask_login import LoginManager, login_user, current_user
+from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import os
 
 app = Flask(__name__)
@@ -48,6 +48,11 @@ def all_books():
     return render_template('all_books.html', books=books)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -90,6 +95,7 @@ def download_file(name):
 
 
 @app.route('/upload_file', methods=['GET', 'POST'])
+@login_required
 def upload_file():
     if request.method == 'POST':
         # проверим, передается ли в запросе файл
