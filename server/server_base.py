@@ -82,6 +82,7 @@ def download_file(name):
 @app.route('/upload_file', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        print(request.args.get('tutorial'))
         # проверим, передается ли в запросе файл
         if 'file' not in request.files:
             # После перенаправления на страницу загрузки
@@ -96,7 +97,7 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             # безопасно извлекаем оригинальное имя файла
-            filename = secure_filename(file.filename)
+            filename = file.filename
             # сохраняем файл
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # если все прошло успешно, то перенаправляем

@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Загрузить новый файл</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
+<form method=post enctype=multipart/form-data>
+    <h1>
+        <textarea id="about" name="tutorial" rows="5" cols="40" readonly=""> Описание
+        </textarea>
+    </h1>
+    <h1><input type=file name=file>
+        <input type=submit value=Upload>
+    </h1>
+</form>
 {% endblock %}
