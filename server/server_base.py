@@ -19,7 +19,7 @@ from flask import send_from_directory
 from werkzeug.utils import secure_filename
 from wtforms import Form, StringField, SelectField
 from flask_login import login_required
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, current_user
 import os
 
 app = Flask(__name__)
@@ -48,6 +48,7 @@ def all_books():
     return render_template('all_books.html', books=books)
 
 
+
 @app.route('/search', methods=['GET'])
 def search():
     # form = SearchForm()
@@ -59,7 +60,7 @@ def search():
     return render_template('all_books.html', books=books)
 
 
-def save_base(filename, about=""):
+def save_base(filename, about="", user_id=0):
     name_text = '.'.join(filename.split('.')[:-1])
     db_sess = db_session.create_session()
     book = db_sess.query(Books).filter(Books.name == name_text).first()
@@ -68,7 +69,7 @@ def save_base(filename, about=""):
         book = Books()
         book.name = name_text
         book.about = about
-        book.avtor = "5"
+        book.author_id = user_id
         book.text = filename
         db_sess.add(book)
         db_sess.commit()
@@ -111,7 +112,7 @@ def upload_file():
             # если все прошло успешно, то перенаправляем
             # на функцию-представление `download_file`
             # для скачивания файла
-            if save_base(filename, about=request.form['about']):
+            if save_base(filename, about=request.form['about'], user_id=current_user.id):
                 return redirect(url_for('download_file', name=filename))
             else:
                 return render_template('error.html')

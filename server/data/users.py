@@ -37,12 +37,12 @@ class Books(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     about = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    avtor = sqlalchemy.Column(sqlalchemy.String, default='None')
+    author_id = sqlalchemy.Column(sqlalchemy.ForeignKey(User.id))
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
 
-    # news = orm.relation("News", back_populates='user')
+    # author = orm.relation("User", back_populates='user')
 
     def link(self):
         return (self.name, url_for('index') + "uploads/" + self.text, self.about)
