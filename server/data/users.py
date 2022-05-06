@@ -44,7 +44,7 @@ class Books(SqlAlchemyBase):
     # news = orm.relation("News", back_populates='user')
 
     def link(self):
-        return (self.name, url_for("/uploads/" + self.text))
+        return (self.name, url_for("uploads/" + self.text))
 
     def __str__(self):
         name, link = self.link()
