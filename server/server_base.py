@@ -14,13 +14,17 @@ from data import db_session
 from flask import json
 from forms.user import RegisterForm
 from forms.Search import SearchForm
+from forms.Login import LoginForm
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
 from wtforms import Form, StringField, SelectField
 from flask_login import login_required
+from flask_login import LoginManager, login_user
 import os
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads'
 # расширения файлов, которые разрешено загружать
@@ -29,6 +33,11 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 @app.route('/all_books')
 def all_books():
@@ -113,6 +122,20 @@ def upload_file():
 def index():
     return render_template('index.html')
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
