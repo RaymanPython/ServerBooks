@@ -21,7 +21,6 @@ from wtforms import Form, StringField, SelectField
 from flask_login import login_required
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 import os
-
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
