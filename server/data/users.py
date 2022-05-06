@@ -2,6 +2,7 @@ import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import url_for
 from sqlalchemy import orm
 
 class User(SqlAlchemyBase):
@@ -39,7 +40,13 @@ class Books(SqlAlchemyBase):
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
+
     # news = orm.relation("News", back_populates='user')
 
+    def link(self):
+        return (self.name, url_for("/uploads/" + self.text))
 
-
+    def __str__(self):
+        name, link = self.link()
+        print(name, link)
+        return f'<a class="nav-link" href="{link}">{name}</a>'

@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request, abort, render_template, redirect,  url_for, flash
+from flask import request, abort, render_template, redirect, url_for, flash
 import json
 import sqlite3
 import sqlalchemy as sa
@@ -19,7 +19,6 @@ from wtforms import Form, StringField, SelectField
 from flask_login import login_required
 import os
 
-
 app = Flask(__name__)
 # папка для сохранения загруженных файлов
 UPLOAD_FOLDER = 'uploads'
@@ -28,6 +27,16 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'html', 'jpg', 'jpeg', 'word'}
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+@app.route('/all_books')
+def all_books():
+    db_sess = db_session.create_session()
+    books = []
+    for book in db_sess.query(Books).all():
+        books.append(str(book))
+    return render_template('all_books.html', books=books)
+
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
@@ -54,16 +63,18 @@ def save_base(filename):
         return True
     else:
         return False
+
+
 def allowed_file(filename):
     """ Функция проверки расширения файла """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
 @app.route('/uploads/<name>')
 def download_file(name):
     return send_from_directory(app.config["UPLOAD_FOLDER"], name)
+
 
 @app.route('/upload_file', methods=['GET', 'POST'])
 def upload_file():
@@ -94,6 +105,7 @@ def upload_file():
                 return render_template('error.html')
     return render_template('files.html')
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -123,6 +135,7 @@ def reqister():
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
 
+
 @app.route('/users_all')
 def users_all():
     db_sess = db_session.create_session()
@@ -130,8 +143,6 @@ def users_all():
     for user in db_sess.query(User).all():
         users.append(str(user))
     return render_template('all_users.html', users=users)
-
-
 
 
 @app.before_first_request

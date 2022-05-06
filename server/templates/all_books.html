@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="navbar-nav">
+    {% for link in books %}
+    <div class="col-md6 border rounded">
+        {{link}}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
