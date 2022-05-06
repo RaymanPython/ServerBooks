@@ -30,7 +30,6 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-
 @app.route('/all_books')
 def all_books():
     db_sess = db_session.create_session()
@@ -49,6 +48,7 @@ def search():
     for book in db_sess.query(Books).filter(Books.name.like(f'%{search}%')).all():
         books.append(book.link())
     return render_template('all_books.html', books=books)
+
 
 def save_base(filename):
     name_text = '.'.join(filename.split('.')[:-1])
