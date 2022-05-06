@@ -34,7 +34,7 @@ def all_books():
     db_sess = db_session.create_session()
     books = []
     for book in db_sess.query(Books).all():
-        books.append(str(book))
+        books.append(book.link())
     return render_template('all_books.html', books=books)
 
 
@@ -52,12 +52,12 @@ def save_base(filename):
     book = db_sess.query(Books).filter(Books.name == name_text).first()
     print(book)
     if book == None:
-        book = Books(
-            name=name_text,
-            about="",
-            avtor="",
-            text=filename
-        )
+        book = Books()
+        book.name = name_text
+        book.about = "5"
+        book.avtor = "5"
+        book.text = filename
+        book.created_date = datetime.datetime.now()
         db_sess.add(book)
         db_sess.commit()
         return True

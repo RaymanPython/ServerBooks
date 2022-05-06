@@ -29,7 +29,7 @@ class User(SqlAlchemyBase):
         return check_password_hash(self.hashed_password, password)
 
 class Books(SqlAlchemyBase):
-    __tablename__ = 'books'
+    __tablename__ = 'books+'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
@@ -44,9 +44,9 @@ class Books(SqlAlchemyBase):
     # news = orm.relation("News", back_populates='user')
 
     def link(self):
-        return (self.name, url_for("uploads/" + self.text))
+        return (self.name, url_for('index') + "uploads/" + self.text)
 
     def __str__(self):
         name, link = self.link()
-        print(name, link)
+        print(f'<a class="nav-link" href="{link}">{name}</a>')
         return f'<a class="nav-link" href="{link}">{name}</a>'

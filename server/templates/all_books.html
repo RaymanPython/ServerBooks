@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="navbar-nav">
-    {% for link in books %}
-    <div class="col-md6 border rounded">
-        {{link}}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            {% for name, link in books %}
+            <div class="navbar-nav">
+                <a class="nav-link" href=" {{ link  }} ">{{ name }}</a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
-{% endfor %}
+</nav>
 {% endblock %}
