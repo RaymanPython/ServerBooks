@@ -29,14 +29,13 @@ class User(SqlAlchemyBase):
         return check_password_hash(self.hashed_password, password)
 
 class Books(SqlAlchemyBase):
-    __tablename__ = 'books+'
+    __tablename__ = 'Books'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     about = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    avtor = sqlalchemy.Column(sqlalchemy.String,
-                              index=True, unique=True, nullable=True)
+    avtor = sqlalchemy.Column(sqlalchemy.String, default='None')
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)

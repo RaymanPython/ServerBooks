@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 import sqlalchemy.ext.declarative as dec
 import datetime
 from sqlalchemy import orm
-from data.users import User, Books
+from data.users import User
 from data.users import Books
 from data import db_session
 from flask import json
@@ -57,7 +57,6 @@ def save_base(filename):
         book.about = "5"
         book.avtor = "5"
         book.text = filename
-        book.created_date = datetime.datetime.now()
         db_sess.add(book)
         db_sess.commit()
         return True
