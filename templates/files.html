@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Загрузить новый файл</h1>
+<form method=post enctype=multipart/form-data>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label">Описание Вашего рассказа</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="about"></textarea>
+    </div>
+    <h1><input type=file name=file>
+        <input type=submit value=Upload>
+    </h1>
+</form>
+{% endblock %}
