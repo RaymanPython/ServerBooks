@@ -1,7 +1,7 @@
-from wtforms import StringField, SubmitField
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, TextAreaField, SubmitField, EmailField
 from wtforms.validators import DataRequired
 
-class SearchForm(Form):
+
+class SearchForm(FlaskForm):
     search = StringField('search', [DataRequired()])
-    submit = SubmitField('Search',
-                         ender_kw={'class': 'btn btn-success btn-block'})

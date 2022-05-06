@@ -13,6 +13,7 @@ from data.users import Books
 from data import db_session
 from flask import json
 from forms.user import RegisterForm
+from forms.Search import SearchForm
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
 from wtforms import Form, StringField, SelectField
@@ -29,6 +30,7 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+
 @app.route('/all_books')
 def all_books():
     db_sess = db_session.create_session()
@@ -38,13 +40,15 @@ def all_books():
     return render_template('all_books.html', books=books)
 
 
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['GET'])
 def search():
-    error = None
-    query = request.args.get('query')
-    print(5)
-    return render_template('files.html')
-
+    # form = SearchForm()
+    search = request.args.get("search")
+    db_sess = db_session.create_session()
+    books = []
+    for book in db_sess.query(Books).filter(Books.name.like(f'%{search}%')).all():
+        books.append(book.link())
+    return render_template('all_books.html', books=books)
 
 def save_base(filename):
     name_text = '.'.join(filename.split('.')[:-1])
