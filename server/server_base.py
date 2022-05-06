@@ -45,12 +45,12 @@ def search():
     search = request.args.get("search")
     db_sess = db_session.create_session()
     books = []
-    for book in db_sess.query(Books).filter(Books.name.like(f'%{search}%')).all():
+    for book in db_sess.query(Books).filter((Books.name.like(f'%{search}%') | Books.about.like(f'%{search}%'))).all():
         books.append(book.link())
     return render_template('all_books.html', books=books)
 
 
-def save_base(filename):
+def save_base(filename, about=""):
     name_text = '.'.join(filename.split('.')[:-1])
     db_sess = db_session.create_session()
     book = db_sess.query(Books).filter(Books.name == name_text).first()
@@ -58,7 +58,7 @@ def save_base(filename):
     if book == None:
         book = Books()
         book.name = name_text
-        book.about = "5"
+        book.about = about
         book.avtor = "5"
         book.text = filename
         db_sess.add(book)
@@ -82,7 +82,6 @@ def download_file(name):
 @app.route('/upload_file', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        print(request.args.get('tutorial'))
         # проверим, передается ли в запросе файл
         if 'file' not in request.files:
             # После перенаправления на страницу загрузки
@@ -103,7 +102,7 @@ def upload_file():
             # если все прошло успешно, то перенаправляем
             # на функцию-представление `download_file`
             # для скачивания файла
-            if save_base(filename):
+            if save_base(filename, about=request.form['about']):
                 return redirect(url_for('download_file', name=filename))
             else:
                 return render_template('error.html')
