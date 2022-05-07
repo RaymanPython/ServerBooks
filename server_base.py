@@ -42,7 +42,9 @@ def load_user(user_id):
 
 @app.route('/users/<name>')
 def users(name):
-    return
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.name == name).first()
+    return render_template('user.html', user=user)
 
 @app.route('/all_books')
 def all_books():
