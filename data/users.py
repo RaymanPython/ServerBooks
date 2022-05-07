@@ -31,6 +31,9 @@ class User(SqlAlchemyBase, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
 
+    def link(self):
+        pass
+
 
 class Books(SqlAlchemyBase):
     __tablename__ = 'Books'

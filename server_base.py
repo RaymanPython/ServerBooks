@@ -33,11 +33,16 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
+
+@app.route('/users/<name>')
+def users(name):
+    return
 
 @app.route('/all_books')
 def all_books():
