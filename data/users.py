@@ -50,9 +50,9 @@ class Books(SqlAlchemyBase):
     author = orm.relation("User")
 
     def link(self):
-        return (self.name, url_for('index') + "uploads/" + self.text, self.about, self.author.name)
+        return (self.name, url_for('index') + "uploads/" + self.text, self.about, self.author)
 
     def __str__(self):
-        name, link = self.link()
+        name, link, about, author = self.link()
         print(f'<a class="nav-link" href="{link}">{name}</a>')
         return f'<a class="nav-link" href="{link}">{name}</a>'
